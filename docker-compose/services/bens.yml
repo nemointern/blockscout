@@ -1,0 +1,29 @@
+version: '3.9'
+
+services:
+  bens:
+    image: ghcr.io/blockscout/bens:latest
+    platform: linux/amd64
+    restart: always
+    container_name: 'bens'
+    ports:
+      - "8050:8050"
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    environment:
+      BENS__DATABASE__CONNECT__URL: ${BENS_DATABASE_URL:-postgresql://graph-node:let-me-in@host.docker.internal:5432/graph-node}
+      BENS__DATABASE__CREATE_DATABASE: 'false'
+      BENS__DATABASE__RUN_MIGRATIONS: 'true'
+      BENS__SERVER__HTTP__ENABLED: 'true'
+      BENS__SERVER__HTTP__ADDR: 0.0.0.0:8050
+      BENS__SERVER__GRPC__ENABLED: 'false'
+      RUST_LOG: ${BENS_RUST_LOG:-info}
+      BENS__CONFIG: /app/config.json
+    volumes:
+      - ${BENS_CONFIG_PATH:-./bens-config.json}:/app/config.json:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8050/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

@@ -1,0 +1,36 @@
+{
+  "subgraphs_reader": {
+    "networks": {
+      "4114": {
+        "blockscout": {
+          "url": "http://backend:4000",
+          "max_concurrent_requests": 5,
+          "timeout": 30
+        },
+        "use_protocols": ["namoshi"],
+        "rpc_url": "https://rpc.mainnet.citrea.xyz"
+      }
+    },
+    "protocols": {
+      "namoshi": {
+        "disabled": false,
+        "network_id": 4114,
+        "subgraph_name": "namoshi-subgraph",
+        "tld_list": ["btc", "citrea"],
+        "address_resolve_technique": "all_domains",
+        "meta": {
+          "short_name": "Namoshi",
+          "title": "Namoshi Name Service",
+          "description": "Native naming service for Citrea network",
+          "icon_url": "",
+          "docs_url": "https://docs.namoshi.xyz"
+        },
+        "specific": {
+          "type": "ens_like",
+          "native_token_contract": "0xDB814a8C706e040F6615F37509ae3a38721577e8",
+          "registry_contract": "0x9fA2e2370dF8014EE485172bF79d10D6756034A8"
+        }
+      }
+    }
+  }
+}
